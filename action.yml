@@ -1,4 +1,4 @@
-name: Trivy KEV/EPSS gate
+name: Trivy KEV EPSS Gate
 description: 'Enrich a Trivy JSON report with CISA KEV and FIRST EPSS, render a summary, and fail on exploitation evidence, not severity.'
 author: Fog&Frog
 branding:
