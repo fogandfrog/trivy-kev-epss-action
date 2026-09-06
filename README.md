@@ -31,12 +31,12 @@ jobs:
           version: v0.74.0
 
       - name: Gate on KEV and EPSS
-        uses: fogandfrog/trivy-kev-epss-action@<sha> # v1.0.0
+        uses: fogandfrog/trivy-kev-epss-action@8ce910224fb3b7593f38b985092d7ef1762d2e6d # v1.0.0
         with:
           report: trivy.json
 ```
 
-`<sha>` is the full commit SHA of the release you want; see [Pin by commit SHA](#pin-by-commit-sha) for why the tag alone is not enough.
+The SHA is the commit tagged `v1.0.0`; see [Pin by commit SHA](#pin-by-commit-sha) for why the tag alone is not enough.
 
 ## What the summary looks like
 
@@ -121,7 +121,7 @@ The step exits `1` when the gate fails and `fail` is `true`, and `2` when the st
 
       - name: Gate on KEV and EPSS
         id: gate
-        uses: fogandfrog/trivy-kev-epss-action@<sha> # v1.0.0
+        uses: fogandfrog/trivy-kev-epss-action@8ce910224fb3b7593f38b985092d7ef1762d2e6d # v1.0.0
         with:
           report: trivy.json
           trivyignore: .trivyignore.yaml
@@ -145,7 +145,7 @@ The step exits `1` when the gate fails and `fail` is `true`, and `2` when the st
             --include-namespaces production
 
       - name: Gate on KEV and EPSS
-        uses: fogandfrog/trivy-kev-epss-action@<sha> # v1.0.0
+        uses: fogandfrog/trivy-kev-epss-action@8ce910224fb3b7593f38b985092d7ef1762d2e6d # v1.0.0
         with:
           report: trivy-k8s.json
           title: production cluster
