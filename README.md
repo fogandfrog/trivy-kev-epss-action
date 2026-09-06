@@ -1,5 +1,7 @@
-# trivy-kev-epss-action
+# Trivy KEV/EPSS Action
 
+[![GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-Trivy%20KEV%20EPSS%20Gate-blue?logo=github)](https://github.com/marketplace/actions/trivy-kev-epss-gate)
+[![Release](https://img.shields.io/github/v/release/fogandfrog/trivy-kev-epss-action?sort=semver)](https://github.com/fogandfrog/trivy-kev-epss-action/releases)
 [![CI](https://github.com/fogandfrog/trivy-kev-epss-action/actions/workflows/ci.yml/badge.svg)](https://github.com/fogandfrog/trivy-kev-epss-action/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
