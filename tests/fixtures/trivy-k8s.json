@@ -1,0 +1,100 @@
+{
+  "ClusterName": "kind-example",
+  "Resources": [
+    {
+      "Namespace": "default",
+      "Kind": "Deployment",
+      "Name": "web",
+      "Metadata": [{"RepoTags": ["nginx:1.25.0"]}],
+      "Results": [
+        {
+          "Target": "nginx:1.25.0 (debian 12.2)",
+          "Class": "os-pkgs",
+          "Type": "debian",
+          "Vulnerabilities": [
+            {
+              "VulnerabilityID": "CVE-2025-20002",
+              "PkgID": "libssl3@3.0.11-1~deb12u2",
+              "PkgName": "libssl3",
+              "InstalledVersion": "3.0.11-1~deb12u2",
+              "FixedVersion": "3.0.14-1~deb12u1",
+              "Status": "fixed",
+              "SeveritySource": "debian",
+              "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-20002",
+              "Title": "openssl: buffer overread in the X.509 name constraints check",
+              "Severity": "HIGH"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Namespace": "default",
+      "Kind": "Deployment",
+      "Name": "api",
+      "Metadata": [{"RepoTags": ["nginx:1.25.0"]}, {"RepoTags": ["api:2.0"]}],
+      "Results": [
+        {
+          "Target": "nginx:1.25.0 (debian 12.2)",
+          "Class": "os-pkgs",
+          "Type": "debian",
+          "Vulnerabilities": [
+            {
+              "VulnerabilityID": "CVE-2025-20002",
+              "PkgID": "libssl3@3.0.11-1~deb12u2",
+              "PkgName": "libssl3",
+              "InstalledVersion": "3.0.11-1~deb12u2",
+              "FixedVersion": "3.0.14-1~deb12u1",
+              "Status": "fixed",
+              "SeveritySource": "debian",
+              "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-20002",
+              "Title": "openssl: buffer overread in the X.509 name constraints check",
+              "Severity": "HIGH"
+            }
+          ]
+        },
+        {
+          "Target": "api:2.0 (alpine 3.20.3)",
+          "Class": "os-pkgs",
+          "Type": "alpine",
+          "Vulnerabilities": [
+            {
+              "VulnerabilityID": "CVE-2025-20003",
+              "PkgID": "busybox@1.36.1-r29",
+              "PkgName": "busybox",
+              "InstalledVersion": "1.36.1-r29",
+              "Status": "affected",
+              "SeveritySource": "nvd",
+              "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-20003",
+              "Title": "busybox: use-after-free in awk",
+              "Severity": "LOW"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Namespace": "kube-system",
+      "Kind": "DaemonSet",
+      "Name": "kube-proxy",
+      "Results": [
+        {
+          "Target": "registry.k8s.io/kube-proxy:v1.31.0",
+          "Class": "config",
+          "Type": "kubernetes",
+          "MisconfSummary": {"Successes": 10, "Failures": 1},
+          "Misconfigurations": [
+            {
+              "Type": "Kubernetes Security Check",
+              "ID": "KSV012",
+              "AVDID": "AVD-KSV-0012",
+              "Title": "Runs as root user",
+              "Severity": "MEDIUM",
+              "Status": "FAIL"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

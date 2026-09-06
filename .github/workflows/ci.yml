@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Weekly, Monday 06:17 UTC. Only the live job runs on the schedule; it exists to
+    # catch KEV and EPSS feed format drift.
+    - cron: "17 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+      - name: Install ruff
+        run: python -m pip install --upgrade "ruff>=0.15"
+      - name: ruff check
+        run: ruff check .
+      - name: ruff format --check
+        run: ruff format --check .
+
+  test:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.14"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install pytest and PyYAML
+        # PyYAML mirrors what GitHub-hosted runners ship; the line-based fallback is
+        # covered by monkeypatching it away in the tests.
+        run: python -m pip install --upgrade "pytest>=8" "pyyaml>=6"
+      - name: pytest
+        run: python -m pytest
+
+  live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Scan the live lockfile with Trivy
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: tests/live
+          format: json
+          output: trivy-live.json
+          severity: CRITICAL,HIGH,MEDIUM,LOW
+          exit-code: "0"
+          version: v0.74.0
+      - name: Enrich and gate
+        id: gate
+        uses: ./
+        with:
+          report: trivy-live.json
+          title: Live check (jQuery 3.4.1)
+          output: trivy-live-enriched.json
+          fail: "false"
+      - name: Assert the gate saw the KEV entry
+        env:
+          GATE: ${{ steps.gate.outputs.gate }}
+          KEV: ${{ steps.gate.outputs.kev }}
+        run: |
+          echo "gate=$GATE kev=$KEV"
+          test "$GATE" = "fail"
+          test "$KEV" -ge 1
+      - name: Upload the enriched JSON
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trivy-live-enriched
+          path: trivy-live-enriched.json
+          if-no-files-found: ignore

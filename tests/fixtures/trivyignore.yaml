@@ -1,0 +1,16 @@
+# Accepted risks. Trivy drops these from the report before this action sees it.
+vulnerabilities:
+  - id: CVE-2021-44228
+    statement: "Log4j is present but the JNDI lookup is disabled at build time"
+    expired_at: 2026-12-31
+  - id: CVE-2025-30001
+    paths:
+      - "vendor/**"
+    statement: Not reachable from the service entry points
+misconfigurations:
+  - id: AVD-DS-0002
+    statement: Root user in a scratch image
+secrets:
+  - id: aws-access-key-id
+    paths:
+      - "tests/fixtures/**"

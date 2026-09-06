@@ -1,0 +1,118 @@
+name: Trivy KEV/EPSS gate
+description: >-
+  Enrich a Trivy JSON report with CISA KEV membership and FIRST EPSS scores, render a
+  summary, and fail the workflow on exploitation evidence rather than on severity alone.
+author: Fog&Frog
+branding:
+  icon: shield
+  color: red
+
+inputs:
+  report:
+    description: Path to the Trivy JSON report.
+    required: true
+  trivyignore:
+    description: >-
+      Path to a .trivyignore.yaml or plain .trivyignore. Used only to warn about
+      suppressed IDs that are on KEV; Trivy has already removed them from the report.
+    required: false
+    default: ""
+  epss-threshold:
+    description: EPSS score at or above which a finding fails the gate.
+    required: false
+    default: "0.10"
+  fail-on-kev:
+    description: Fail on KEV membership, whether or not a fix exists.
+    required: false
+    default: "true"
+  fail-on-epss:
+    description: Fail on EPSS at or above the threshold, whether or not a fix exists.
+    required: false
+    default: "true"
+  fail-on-severity:
+    description: >-
+      Comma-separated severities that fail when a fix is available. An empty string
+      disables the severity rule.
+    required: false
+    default: CRITICAL,HIGH
+  severity-gate-unfixed:
+    description: Apply fail-on-severity to unfixed findings as well.
+    required: false
+    default: "false"
+  fail:
+    description: >-
+      Exit non-zero when the gate fails. With "false" everything is still rendered and
+      the gate output carries the verdict.
+    required: false
+    default: "true"
+  title:
+    description: Heading of the summary. Defaults to the artifact name from the report.
+    required: false
+    default: ""
+  output:
+    description: Where the enriched JSON is written.
+    required: false
+    default: trivy-enriched.json
+  step-summary:
+    description: Write the Markdown summary to $GITHUB_STEP_SUMMARY.
+    required: false
+    default: "true"
+  max-rows:
+    description: Rows in the summary table. The full list is always in the JSON.
+    required: false
+    default: "200"
+  kev-url:
+    description: CISA KEV catalogue URL. Override for mirrors and tests; file:// is accepted.
+    required: false
+    default: https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
+  epss-url:
+    description: FIRST EPSS API URL. Override for mirrors and tests; file:// is accepted.
+    required: false
+    default: https://api.first.org/data/v1/epss
+
+outputs:
+  gate:
+    description: pass or fail.
+    value: ${{ steps.gate.outputs.gate }}
+  failing:
+    description: Number of findings that failed the gate.
+    value: ${{ steps.gate.outputs.failing }}
+  total:
+    description: Number of findings after deduplication.
+    value: ${{ steps.gate.outputs.total }}
+  kev:
+    description: Number of findings on KEV.
+    value: ${{ steps.gate.outputs.kev }}
+  epss-above-threshold:
+    description: Number of findings at or above the EPSS threshold.
+    value: ${{ steps.gate.outputs.epss-above-threshold }}
+  suppressed-kev:
+    description: Comma-separated IDs from the ignore file that are on KEV.
+    value: ${{ steps.gate.outputs.suppressed-kev }}
+  report:
+    description: Path of the enriched JSON.
+    value: ${{ steps.gate.outputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - id: gate
+      shell: bash
+      # Inputs travel through the environment, never through the command line, so no
+      # value can reach the shell unquoted.
+      env:
+        INPUT_REPORT: ${{ inputs.report }}
+        INPUT_TRIVYIGNORE: ${{ inputs.trivyignore }}
+        INPUT_EPSS_THRESHOLD: ${{ inputs.epss-threshold }}
+        INPUT_FAIL_ON_KEV: ${{ inputs.fail-on-kev }}
+        INPUT_FAIL_ON_EPSS: ${{ inputs.fail-on-epss }}
+        INPUT_FAIL_ON_SEVERITY: ${{ inputs.fail-on-severity }}
+        INPUT_SEVERITY_GATE_UNFIXED: ${{ inputs.severity-gate-unfixed }}
+        INPUT_FAIL: ${{ inputs.fail }}
+        INPUT_TITLE: ${{ inputs.title }}
+        INPUT_OUTPUT: ${{ inputs.output }}
+        INPUT_STEP_SUMMARY: ${{ inputs.step-summary }}
+        INPUT_MAX_ROWS: ${{ inputs.max-rows }}
+        INPUT_KEV_URL: ${{ inputs.kev-url }}
+        INPUT_EPSS_URL: ${{ inputs.epss-url }}
+      run: python3 "${{ github.action_path }}/trivy_kev_epss.py"

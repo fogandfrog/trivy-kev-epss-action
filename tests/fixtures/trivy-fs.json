@@ -1,0 +1,152 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2026-09-05T10:00:00Z",
+  "ArtifactName": ".",
+  "ArtifactType": "filesystem",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {"type": "", "diff_ids": null},
+      "config": {}
+    }
+  },
+  "Results": [
+    {
+      "Target": "uv.lock",
+      "Class": "lang-pkgs",
+      "Type": "uv",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2026-48710",
+          "PkgID": "starlette@1.0.0",
+          "PkgName": "starlette",
+          "PkgIdentifier": {"PURL": "pkg:pypi/starlette@1.0.0", "UID": "1"},
+          "InstalledVersion": "1.0.0",
+          "FixedVersion": "1.0.1",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-48710",
+          "Title": "Starlette has missing Host header validation",
+          "Description": "Starlette reconstructs the request URL from the Host header without validating it, which allows request smuggling and authentication bypass when authentication depends on the reconstructed path.",
+          "Severity": "MEDIUM",
+          "CweIDs": ["CWE-444"],
+          "References": ["https://github.com/Kludex/starlette/security/advisories/GHSA-86qp-5c8j-p5mr"],
+          "PublishedDate": "2026-08-28T15:15:00Z",
+          "LastModifiedDate": "2026-09-02T12:00:00Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-48710",
+          "PkgID": "starlette@1.0.0",
+          "PkgName": "starlette",
+          "PkgIdentifier": {"PURL": "pkg:pypi/starlette@1.0.0", "UID": "1"},
+          "InstalledVersion": "1.0.0",
+          "FixedVersion": "1.0.1",
+          "Status": "fixed",
+          "SeveritySource": "nvd",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-48710",
+          "Title": "Starlette has missing Host header validation",
+          "Severity": "MEDIUM"
+        },
+        {
+          "VulnerabilityID": "GHSA-59g5-xgcq-4qw3",
+          "PkgID": "python-multipart@0.0.9",
+          "PkgName": "python-multipart",
+          "PkgIdentifier": {"PURL": "pkg:pypi/python-multipart@0.0.9", "UID": "2"},
+          "InstalledVersion": "0.0.9",
+          "FixedVersion": "0.0.18",
+          "Status": "fixed",
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://github.com/advisories/GHSA-59g5-xgcq-4qw3",
+          "Title": "python-multipart vulnerable to denial of service when parsing form data boundaries",
+          "Severity": "HIGH",
+          "CweIDs": ["CWE-400"]
+        },
+        {
+          "VulnerabilityID": "CVE-2025-10001",
+          "PkgID": "requests@2.31.0",
+          "PkgName": "requests",
+          "PkgIdentifier": {"PURL": "pkg:pypi/requests@2.31.0", "UID": "3"},
+          "InstalledVersion": "2.31.0",
+          "FixedVersion": "2.32.4",
+          "Status": "fixed",
+          "SeveritySource": "nvd",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-10001",
+          "Title": "requests: credential leak on cross-origin redirect",
+          "Severity": "HIGH"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-10002",
+          "PkgID": "pillow@10.4.0",
+          "PkgName": "pillow",
+          "PkgIdentifier": {"PURL": "pkg:pypi/pillow@10.4.0", "UID": "4"},
+          "InstalledVersion": "10.4.0",
+          "FixedVersion": "",
+          "Status": "affected",
+          "SeveritySource": "nvd",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-10002",
+          "Title": "pillow: out-of-bounds read in the TIFF decoder",
+          "Severity": "HIGH"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-10003",
+          "PkgID": "cryptography@42.0.0",
+          "PkgName": "cryptography",
+          "PkgIdentifier": {"PURL": "pkg:pypi/cryptography@42.0.0", "UID": "5"},
+          "InstalledVersion": "42.0.0",
+          "FixedVersion": "43.0.1",
+          "Status": "fixed",
+          "SeveritySource": "nvd",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-10003",
+          "Title": "cryptography: NULL pointer dereference with PKCS#12 bundles",
+          "Severity": "MEDIUM"
+        },
+        {
+          "VulnerabilityID": "CVE-2026-99999",
+          "PkgID": "urllib3@2.2.0",
+          "PkgName": "urllib3",
+          "PkgIdentifier": {"PURL": "pkg:pypi/urllib3@2.2.0", "UID": "6"},
+          "InstalledVersion": "2.2.0",
+          "FixedVersion": "2.2.3",
+          "Status": "fixed",
+          "SeveritySource": "nvd",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2026-99999",
+          "Title": "urllib3: proxy authorization header not stripped on redirect",
+          "Severity": "LOW"
+        }
+      ]
+    },
+    {
+      "Target": "config/.env",
+      "Class": "secret",
+      "Secrets": [
+        {
+          "RuleID": "aws-access-key-id",
+          "Category": "AWS",
+          "Severity": "CRITICAL",
+          "Title": "AWS Access Key ID",
+          "StartLine": 3,
+          "EndLine": 3,
+          "Match": "AWS_ACCESS_KEY_ID=AKIA****************"
+        }
+      ]
+    },
+    {
+      "Target": "Dockerfile",
+      "Class": "config",
+      "Type": "dockerfile",
+      "MisconfSummary": {"Successes": 20, "Failures": 1},
+      "Misconfigurations": [
+        {
+          "Type": "Dockerfile Security Check",
+          "ID": "DS002",
+          "AVDID": "AVD-DS-0002",
+          "Title": "Image user should not be 'root'",
+          "Severity": "HIGH",
+          "Status": "FAIL"
+        }
+      ]
+    }
+  ]
+}

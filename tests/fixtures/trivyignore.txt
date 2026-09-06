@@ -1,0 +1,4 @@
+# Accepted risks, plain .trivyignore form: one ID per line, optional exp:YYYY-MM-DD.
+CVE-2021-44228 exp:2026-12-31
+
+CVE-2025-30001  # not reachable

@@ -1,0 +1,10 @@
+{
+  "name": "trivy-kev-epss-live",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Deliberately vulnerable lockfile scanned by the live CI job: jQuery 3.4.1 carries CVE-2020-11023, which is MEDIUM and on the CISA KEV catalogue.",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "3.4.1"
+  }
+}
